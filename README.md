@@ -4,7 +4,7 @@ O problema do jantar dos filósofos é um clássico na área de **concorrência*
 
 Cinco filósofos estão sentados ao redor de uma mesa circular. Cada filósofo alterna entre comer e pensar. Para comer, eles precisam pegar dois garfos (um de cada lado do prato). No entanto, só há cinco garfos, então eles precisam coordenar entre si para evitar situações onde todos pegam um garfo e ficam esperando eternamente pelo outro (o que levaria a um deadlock).
 
-<img src="../imgs/Etapas_RSL.png" alt="drawing" width="600">
+<img src="dinning_philosophers.webp" alt="drawing" width="600">
 
 ## Perspectiva na Programação Paralela e Distribuída
 
