@@ -4,6 +4,8 @@ O problema do jantar dos filósofos é um clássico na área de **concorrência*
 
 Cinco filósofos estão sentados ao redor de uma mesa circular. Cada filósofo alterna entre comer e pensar. Para comer, eles precisam pegar dois garfos (um de cada lado do prato). No entanto, só há cinco garfos, então eles precisam coordenar entre si para evitar situações onde todos pegam um garfo e ficam esperando eternamente pelo outro (o que levaria a um deadlock).
 
+<img src="../imgs/Etapas_RSL.png" alt="drawing" width="600">
+
 ## Perspectiva na Programação Paralela e Distribuída
 
 1. **Concorrência**: Cada filósofo representa uma **thread** ou **processo** que compete por recursos compartilhados (os garfos). No contexto de programação paralela, esses processos precisam acessar os recursos de forma **sincronizada** para evitar problemas como **condições de corrida**, onde múltiplos processos tentam acessar o mesmo recurso ao mesmo tempo.
