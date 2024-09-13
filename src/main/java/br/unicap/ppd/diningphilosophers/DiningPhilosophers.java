@@ -75,16 +75,16 @@ class Philosopher implements Runnable {
 
 public class DiningPhilosophers {
     public static void main(String[] args) {
-        int numberOfPhilosophers = 5;
+        int numberOfPhilosophers = 6;
         ReentrantLock[] forks = new ReentrantLock[numberOfPhilosophers];
 
         // Initialize forks as ReentrantLocks
         for (int i = 0; i < numberOfPhilosophers; i++) {
             forks[i] = new ReentrantLock();
         }
-        ThreadColor[] colors = {ThreadColor.ANSI_BLUE, ThreadColor.ANSI_CYAN, ThreadColor.ANSI_GREEN, ThreadColor.ANSI_PURPLE, ThreadColor.ANSI_RED};
+        ThreadColor[] colors = {ThreadColor.ANSI_BLUE, ThreadColor.ANSI_CYAN, ThreadColor.ANSI_GREEN, ThreadColor.ANSI_PURPLE, ThreadColor.ANSI_RED, ThreadColor.ANSI_WHITE};
 
-        String[] names = {"Duda", "Rodrigo", "Caio", "Gil", "Arquimedes"};
+        String[] names = {"Duda", "Rodrigo", "Caio", "Gil", "Arquimedes", "Russo"};
         // Create and start philosopher threads
         Thread[] philosophers = new Thread[numberOfPhilosophers];
         for (int i = 0; i < numberOfPhilosophers; i++) {
