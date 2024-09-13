@@ -1,30 +1,37 @@
 package main.java.br.unicap.ppd.diningphilosophers;
 
+import main.java.br.unicap.ppd.diningphilosophers.threadcolor.ThreadColor;
+
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Philosopher implements Runnable {
-    private final int id;
+    private final String philosopherName;
     private final ReentrantLock leftFork;
     private final ReentrantLock rightFork;
+    private final ThreadColor color;
 
-    public Philosopher(int id, ReentrantLock leftFork, ReentrantLock rightFork) {
-        this.id = id;
+    public Philosopher(String philosopherName, ReentrantLock leftFork, ReentrantLock rightFork, ThreadColor color) {
+        this.philosopherName = philosopherName;
         this.leftFork = leftFork;
         this.rightFork = rightFork;
+        this.color = color;
     }
 
     private void think() throws InterruptedException {
-        int thinkTime = ThreadLocalRandom.current().nextInt(1000, 3000); // Random thinking time
-        System.out.println("Philosopher " + id + " is thinking for " + thinkTime + " ms.");
+
+        int thinkTime = ThreadLocalRandom.current().nextInt(4000, 8000); // Random thinking time
+        System.out.printf("%s%s is thinking for %d ms.\n",color.color(), philosopherName, thinkTime);
         Thread.sleep(thinkTime);
     }
 
     private void eat() throws InterruptedException {
-        int eatTime = ThreadLocalRandom.current().nextInt(1000, 2000); // Random eating time
-        System.out.println("Philosopher " + id + " is eating for " + eatTime + " ms.");
+
+        int eatTime = ThreadLocalRandom.current().nextInt(5000, 9000); // Random eating time
+        System.out.printf("%s%s is eating for %d ms.\n",color.color(), philosopherName, eatTime);
         Thread.sleep(eatTime);
     }
+
 
     @Override
     public void run() {
@@ -32,38 +39,36 @@ class Philosopher implements Runnable {
             while (true) {
                 think();
 
-                // Try to pick up left fork
+
                 if (leftFork.tryLock()) {
                     try {
-                        System.out.println("Philosopher " + id + " picked up left fork.");
+                        System.out.printf("%s%s picked up left fork.%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
 
-                        // Try to pick up right fork
+
                         if (rightFork.tryLock()) {
                             try {
-                                System.out.println("Philosopher " + id + " picked up right fork.");
+                                System.out.printf("%s%s picked up right fork.%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
                                 eat();
                             } finally {
                                 rightFork.unlock(); // Release right fork after eating
-                                System.out.println("Philosopher " + id + " put down right fork.");
+                                System.out.printf("%s%s put down right fork.%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
                             }
                         } else {
-                            // Failed to pick up right fork, retry after a random wait
-                            System.out.println("Philosopher " + id + " failed to pick up right fork, retrying...");
+                            System.out.printf("%s%s failed to pick up right fork, retrying...%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
                         }
                     } finally {
                         leftFork.unlock(); // Release left fork if not both forks were acquired
-                        System.out.println("Philosopher " + id + " put down left fork.");
+                        System.out.printf("%s%s put down left fork.%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
                     }
                 }
 
-                // Wait a random time before retrying if forks were not acquired
-                int waitTime = ThreadLocalRandom.current().nextInt(1000, 2000);
-                System.out.println("Philosopher " + id + " waits " + waitTime + " ms before retrying.");
+                int waitTime = ThreadLocalRandom.current().nextInt(5000, 9000);
+                System.out.printf("%s%s waits %d ms before retrying.%s\n", color.color(), philosopherName, waitTime, ThreadColor.ANSI_RESET.color());
                 Thread.sleep(waitTime);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            System.out.println("Philosopher " + id + " was interrupted.");
+            System.out.printf("%s%s was interrupted.%s\n", color.color(), philosopherName, ThreadColor.ANSI_RESET.color());
         }
     }
 }
@@ -77,11 +82,13 @@ public class DiningPhilosophers {
         for (int i = 0; i < numberOfPhilosophers; i++) {
             forks[i] = new ReentrantLock();
         }
+        ThreadColor[] colors = {ThreadColor.ANSI_BLUE, ThreadColor.ANSI_CYAN, ThreadColor.ANSI_GREEN, ThreadColor.ANSI_PURPLE, ThreadColor.ANSI_RED};
 
+        String[] names = {"Duda", "Rodrigo", "Caio", "Gil", "Arquimedes"};
         // Create and start philosopher threads
         Thread[] philosophers = new Thread[numberOfPhilosophers];
         for (int i = 0; i < numberOfPhilosophers; i++) {
-            philosophers[i] = new Thread(new Philosopher(i, forks[i], forks[(i + 1) % numberOfPhilosophers]));
+            philosophers[i] = new Thread(new Philosopher(names[i], forks[i], forks[(i + 1) % numberOfPhilosophers], colors[i]));
             philosophers[i].start();
         }
 
